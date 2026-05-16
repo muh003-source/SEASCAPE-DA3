@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌊 Underwater Depth Estimation Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .summary-box {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .summary-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        
+        .result-card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+        }
+        
+        .result-card-header h3 {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+        
+        .result-card-body {
+            padding: 20px;
+        }
+        
+        .result-card-body table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .result-card-body table tr {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-card-body table tr:last-child {
+            border-bottom: none;
+        }
+        
+        .result-card-body table td {
+            padding: 10px 0;
+        }
+        
+        .result-card-body table td:first-child {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .result-card-body table td:last-child {
+            text-align: right;
+            color: #666;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .info-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .info-box p {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+        
+        .script-links {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .script-links h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .script-links ol {
+            margin-left: 20px;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        .script-links li {
+            margin-bottom: 10px;
+        }
+        
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌊 Underwater Depth Estimation</h1>
+            <p>Results from Depth Anything V2 Model</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Processed: May 13, 2026</p>
+        </header>
+        
+        <div class="summary-box">
+            <h2>📊 Processing Summary</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Images Processed</h3>
+                    <div class="value">6</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Model Used</h3>
+                    <div class="value">V2-Small</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Output Formats</h3>
+                    <div class="value">PNG + JSON</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Processing</h3>
+                    <div class="value">~2-3s</div>
+                </div>
+            </div>
+            <div class="info-box">
+                <h4>📁 Results Locations:</h4>
+                <p>
+                    <strong>Basic Results:</strong> <code>github_depth_results/</code> - 3 images with simple visualizations<br>
+                    <strong>Enhanced Results:</strong> <code>github_depth_results_enhanced/</code> - 3 images with 6-panel detailed analysis
+                </p>
+            </div>
+        </div>
+        
+        <div class="script-links">
+            <h2>🔧 Scripts Created</h2>
+            <ol>
+                <li>
+                    <strong>download_and_process_github_images.py</strong>
+                    <p>Basic pipeline: Downloads from GitHub, generates synthetic images, creates simple visualizations</p>
+                </li>
+                <li>
+                    <strong>github_real_images_processor.py</strong>
+                    <p>Enhanced pipeline: Attempts real downloads, creates 6-panel visualizations with comprehensive statistics</p>
+                </li>
+            </ol>
+        </div>
+        
+        <div class="summary-box">
+            <h2>📈 Results Overview</h2>
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <h3>Image 1 - Basic</h3>
+                        <p>synthetic_underwater_0.jpg</p>
+                    </div>
+                    <div class="result-card-body">
+                        <table>
+                            <tr>
+                                <td>Min Depth:</td>
+                                <td>0.0000</td>
+                            </tr>
+                            <tr>
+                                <td>Max Depth:</td>
+                                <td>0.4957</td>
+                            </tr>
+                            <tr>
+                                <td>Mean Depth:</td>
+                                <td>0.0799</td>
+                            </tr>
+                            <tr>
+                                <td>Std Dev:</td>
+                                <td>0.1480</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <h3>Image 1 - Enhanced</h3>
+                        <p>synthetic_underwater_0.jpg</p>
+                    </div>
+                    <div class="result-card-body">
+                        <table>
+                            <tr>
+                                <td>Min Depth:</td>
+                                <td>0.7524</td>
+                            </tr>
+                            <tr>
+                                <td>Max Depth:</td>
+                                <td>2.5261</td>
+                            </tr>
+                            <tr>
+                                <td>Mean Depth:</td>
+                                <td>1.2583</td>
+                            </tr>
+                            <tr>
+                                <td>Std Dev:</td>
+                                <td>0.4064</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <h3>Image 2 - Enhanced</h3>
+                        <p>synthetic_underwater_1.jpg</p>
+                    </div>
+                    <div class="result-card-body">
+                        <table>
+                            <tr>
+                                <td>Min Depth:</td>
+                                <td>0.8581</td>
+                            </tr>
+                            <tr>
+                                <td>Max Depth:</td>
+                                <td>2.3875</td>
+                            </tr>
+                            <tr>
+                                <td>Mean Depth:</td>
+                                <td>1.3772</td>
+                            </tr>
+                            <tr>
+                                <td>Std Dev:</td>
+                                <td>0.3394</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <h3>Image 3 - Enhanced</h3>
+                        <p>synthetic_underwater_2.jpg</p>
+                    </div>
+                    <div class="result-card-body">
+                        <table>
+                            <tr>
+                                <td>Min Depth:</td>
+                                <td>0.9117</td>
+                            </tr>
+                            <tr>
+                                <td>Max Depth:</td>
+                                <td>2.4878</td>
+                            </tr>
+                            <tr>
+                                <td>Mean Depth:</td>
+                                <td>1.4301</td>
+                            </tr>
+                            <tr>
+                                <td>Std Dev:</td>
+                                <td>0.3154</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-box">
+            <h2>💾 Output Files Generated</h2>
+            <div class="info-box">
+                <h4>Basic Results Folder: <code>github_depth_results/</code></h4>
+                <p>
+                    • <code>depth_result_0.png</code> (185 KB)<br>
+                    • <code>depth_result_1.png</code> (185 KB)<br>
+                    • <code>depth_result_2.png</code> (182 KB)<br>
+                    • <code>processing_report.json</code><br>
+                    • <code>input_images/</code> (3 synthetic underwater images)
+                </p>
+            </div>
+            <div class="info-box">
+                <h4>Enhanced Results Folder: <code>github_depth_results_enhanced/</code></h4>
+                <p>
+                    • <code>depth_analysis_00.png</code> (438 KB - 6-panel visualization)<br>
+                    • <code>depth_analysis_01.png</code> (429 KB - 6-panel visualization)<br>
+                    • <code>depth_analysis_02.png</code> (462 KB - 6-panel visualization)<br>
+                    • <code>RESULTS_SUMMARY.md</code> (Markdown report)<br>
+                    • <code>processing_report.json</code> (Detailed JSON statistics)<br>
+                    • <code>input_images/</code> (3 realistic synthetic underwater images)
+                </p>
+            </div>
+        </div>
+        
+        <div class="summary-box">
+            <h2>🚀 Next Steps</h2>
+            <div class="info-box">
+                <h4>To view the results:</h4>
+                <p>
+                    <code>cat github_depth_results_enhanced/RESULTS_SUMMARY.md</code> - View markdown summary<br>
+                    <code>cat github_depth_results_enhanced/processing_report.json</code> - View detailed JSON data<br>
+                    <code>open github_depth_results_enhanced/depth_analysis_*.png</code> - View depth visualizations
+                </p>
+            </div>
+            <div class="info-box">
+                <h4>To use with your Gradio app:</h4>
+                <p>
+                    1. Launch your app: <code>python3 app.py</code><br>
+                    2. Navigate to <code>http://localhost:7860</code><br>
+                    3. Upload any image from the <code>github_depth_results_enhanced/input_images/</code> folder<br>
+                    4. Get interactive depth maps with hover tooltips!
+                </p>
+            </div>
+            <div class="info-box">
+                <h4>To process your own images:</h4>
+                <p>
+                    Update the GitHub URLs in the script's <code>REAL_IMAGE_SOURCES</code> dictionary, or modify the download functions to use specific dataset APIs from:<br>
+                    • Kaggle (ATLANTIS, FLSea VI datasets)<br>
+                    • Zenodo (VAROS dataset)<br>
+                    • GitHub raw content links
+                </p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>✅ Underwater Depth Estimation Pipeline Complete</p>
+            <p>Generated with Depth Anything V2-Small | HuggingFace Transformers</p>
+        </footer>
+    </div>
+</body>
+</html>
